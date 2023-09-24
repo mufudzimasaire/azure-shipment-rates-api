@@ -8,7 +8,7 @@
       "methods": [
         "post"
       ],
-      "route": "shipment/quotes"
+      "route": "shipment/rates"
     },
     {
       "type": "http",
@@ -16,5 +16,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../dist/FetchQuotes/index.js"
+  "scriptFile": "../dist/FetchRates/index.js"
 }
