@@ -5,6 +5,7 @@ import { IShipmentRepository, ShipmentRepository } from './repositories/shipment
 import { IShipmentService, ShipmentService } from './services/shipment-service'
 import { TYPES } from './types'
 import ShipEngine from 'shipengine'
+import { IShipmentAdapter, ShipEngineAdapter } from './services/shipment-service/adapters/shipengine-adapter'
 
 const appContainer = new Container({
   /**
@@ -27,5 +28,6 @@ appContainer.bind<ShipEngine>(TYPES.ShipEngine).toConstantValue(
 
 appContainer.bind<IShipmentRepository>(TYPES.ShipmentRepository).to(ShipmentRepository)
 appContainer.bind<IShipmentService>(TYPES.ShipmentService).to(ShipmentService)
+appContainer.bind<IShipmentAdapter>(TYPES.ShipEngineAdapter).to(ShipEngineAdapter)
 
 export default appContainer

@@ -41,3 +41,36 @@ export interface IFetchRatesPayload {
   shippingAddress: IShippingAddress;
   weight: IWeight;
 }
+
+interface IRawResponseRateAmount {
+  currency: string
+  amount: number
+}
+
+export interface IRawResponseRate {
+  rateId: string
+  rateType: string
+  carrierId: string
+  shippingAmount: IRawResponseRateAmount
+  insuranceAmount: IRawResponseRateAmount
+  confirmationAmount: IRawResponseRateAmount
+  otherAmount: IRawResponseRateAmount
+  taxAmount: number
+  zone: string
+  packageType: string
+  deliveryDays: number
+  guaranteedService: boolean
+  estimatedDeliveryDate: string
+  carrierDeliveryDays: string
+  shipDate: string
+  negotiatedRate: boolean
+  serviceType: string
+  serviceCode: string
+  trackable: boolean
+  carrierCode: string
+  carrierNickname: string
+  carrierFriendlyName: string
+  validationStatus: string
+  warningMessages: string[],
+  errorMessages: string[]
+}

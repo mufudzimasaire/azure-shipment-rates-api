@@ -13,12 +13,12 @@ export interface IShipmentRepository {
 
 @injectable()
 export class ShipmentRepository implements IShipmentRepository {
-  private _db: CosmosClient
+  // private _db: CosmosClient
 
-  constructor(@inject(TYPES.CosmosClient) cosmosClient: CosmosClient) {
-    this._db = cosmosClient.database(process.env.DATABASE_NAME)
-                            .container(process.env.DATABASE_CONTAINER_NAME)
-  }
+  // constructor(@inject(TYPES.CosmosClient) cosmosClient: CosmosClient) {
+  //   this._db = cosmosClient.database(process.env.DATABASE_NAME)
+  //                           .container(process.env.DATABASE_CONTAINER_NAME)
+  // }
 
   async createShipment(shipment: IShipment): Promise<void> {
     console.log('ShipmentRepository.createShipment', {shipment})
