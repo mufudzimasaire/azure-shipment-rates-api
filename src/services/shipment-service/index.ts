@@ -3,7 +3,7 @@ import { IShipmentRepository } from '../../repositories/shipment-repository'
 import { IFetchRatesPayload, IRate, IShipment } from '../../interfaces'
 import { TYPES } from '../../types'
 import { IShipmentAdapter } from './adapters/shipengine-adapter'
-import { ShipmentRatesError } from './errors/shipment-rates-error'
+import { ShipmentRatesError } from '../../errors/shipment-rates-error'
 
 /**
  * @interface IShipmentService

@@ -5,6 +5,7 @@ export interface IWeight {
 
 export interface IShippingAddress {
   addressLine1: string
+  addressLine2?: string
   city: string
   companyName: string
   country: string

@@ -3,7 +3,7 @@ import { IFetchRatesPayload, IShipment } from '../../../interfaces'
 import { TYPES } from '../../../types'
 import ShipEngine from 'shipengine'
 import { warehouseAddress } from '../warehouse-address'
-import { ShipmentRatesError } from '../errors/shipment-rates-error'
+import { ShipmentRatesError } from '../../../errors/shipment-rates-error'
 
 /**
  * @interface IShipmentAdapter

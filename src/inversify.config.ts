@@ -15,12 +15,12 @@ const appContainer = new Container({
   defaultScope: BindingScopeEnum.Request
 })
 
-// appContainer.bind<CosmosClient>(TYPES.CosmosClient).toConstantValue(
-//   new CosmosClient({
-//     endpoint: process.env.COSMOS_DB_ENDPOINT,
-//     key: process.env.COSMOS_DB_KEY
-//   })
-// )
+appContainer.bind<CosmosClient>(TYPES.CosmosClient).toConstantValue(
+  new CosmosClient({
+    endpoint: process.env.COSMOS_DB_ENDPOINT,
+    key: process.env.COSMOS_DB_KEY
+  })
+)
 
 appContainer.bind<ShipEngine>(TYPES.ShipEngine).toConstantValue(
   new ShipEngine(process.env.SHIPENGINE_API_KEY)
