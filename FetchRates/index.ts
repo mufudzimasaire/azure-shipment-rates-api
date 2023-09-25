@@ -1,14 +1,12 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions'
 import appContainer from '../src/inversify.config'
-import { IShipmentService, ShipmentService } from '../src/services/shipment-service'
+import { IShipmentService } from '../src/services/shipment-service'
 import { TYPES } from '../src/types'
 
-const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
+const fetchRatesTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
   try {
-    context.log.info('HTTP trigger function processed a request.')
     const shipmentService = appContainer.get<IShipmentService>(TYPES.ShipmentService)
     const result = await shipmentService.fetchRates(req.body)
-    context.log.info({result})
 
     context.res = {
       body: result
@@ -22,4 +20,4 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
   }
 }
 
-export default httpTrigger
+export default fetchRatesTrigger
