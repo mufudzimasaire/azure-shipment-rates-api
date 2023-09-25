@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify'
 import { IShipmentRepository } from '../../repositories/shipment-repository'
-import { IFetchRatesPayload, IRate, IShipment } from '../../interfaces'
+import { IFetchRatesPayload, IShipment } from '../../interfaces'
 import { TYPES } from '../../types'
 import { IShipmentAdapter } from './adapters/shipengine-adapter'
 import { ShipmentRatesError } from '../../errors/shipment-rates-error'
@@ -10,7 +10,7 @@ import { ShipmentRatesError } from '../../errors/shipment-rates-error'
  * @desc Responsible for fetching rates.
  **/
 export interface IShipmentService {
-  fetchRates: (payload: IFetchRatesPayload) => Promise<IRate[]>
+  fetchRates: (payload: IFetchRatesPayload) => Promise<IShipment | null>
 }
 
 @injectable()
@@ -37,15 +37,17 @@ export class ShipmentService implements IShipmentService {
    * @returns The fetched rates or null if there was an error.
    * @throws {ShipmentRatesError} if there was an error getting shipment rates.
    */
-  async fetchRates(payload: IFetchRatesPayload): Promise<IRate[]> {
+  async fetchRates(payload: IFetchRatesPayload): Promise<IShipment | null> {
     try {
       const shipment: IShipment = await this._client.fetchRates(payload);
 
-      if (!shipment) return [];
+      if (!shipment) {
+        return shipment;
+      }
 
       await this._repository.createShipment(shipment);
 
-      return shipment?.rates;
+      return shipment;
     } catch (error) {
       throw new ShipmentRatesError(`Error getting shipment rates: ${error.message}`);
     }

@@ -71,7 +71,7 @@ To set up this project, follow these steps:
     - `COSMOS_DB_KEY`: Cosmos DB access key.
     - `DATABASE_CONTAINER`: Name of the Cosmos DB container.
     - `DATABASE_NAME`: Name of the Cosmos DB database.
-    - `SHIPENGINE_API_KEY`: Your ShipEngine API key.
+    - `SHIPENGINE_API_KEY`: Your free [ShipEngine API key](https://www.shipengine.com/uk/signup/).
     - `SHIPENGINE_CARRIER_IDS`: Carrier IDs for ShipEngine (comma-separated).
 
 ## TODO

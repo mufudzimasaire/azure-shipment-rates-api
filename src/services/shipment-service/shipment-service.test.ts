@@ -76,38 +76,23 @@ describe('ShipmentService', () => {
     const result = await shipmentService.fetchRates(payload);
 
     // Assert
-    expect(result).toEqual(shipment.rates);
+    expect(result).toEqual(shipment);
     expect(repositoryMock.createShipment).toHaveBeenCalledWith(shipment);
   });
 
   it('should return the fetched rates', async () => {
     // Arrange
     const payload: IFetchRatesPayload = mockRatesPayload();
+    const shipment: IShipment = mockShipment();
 
     // Act
     const result = await shipmentService.fetchRates(payload);
 
     // Assert
-    expect(result).toEqual([
-      {
-        id: 'rate1',
-        carrier: 'Standard',
-        carrierCode: 'UPS',
-        carrierId: 'ups',
-        confirmationAmount: 10,
-        currency: 'USD',
-        deliveryDays: 3,
-        estimatedDeliveryDate: '2022-01-01',
-        insuranceAmount: 5,
-        serviceCode: 'ST',
-        shipDate: '2021-12-31',
-        shipmentAmount: 20,
-        trackable: true,
-      },
-    ]);
+    expect(result).toEqual(shipment);
   });
 
-  it('should return an empty array if no shipment is fetched', async () => {
+  it('should return null if no shipment is fetched', async () => {
     // Arrange
     const payload: IFetchRatesPayload = mockRatesPayload();
     const clientMock: jest.Mocked<IShipmentAdapter> = {
@@ -119,7 +104,7 @@ describe('ShipmentService', () => {
     const result = await shipmentService.fetchRates(payload);
 
     // Assert
-    expect(result).toEqual([]);
+    expect(result).toEqual(null);
   });
 
   it('should throw a ShipmentRatesError if there was an error getting shipment rates', async () => {
