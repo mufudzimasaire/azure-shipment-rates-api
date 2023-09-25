@@ -2,7 +2,8 @@ import { ShipmentService } from ".";
 import { IFetchRatesPayload, IShipment, IShippingAddress } from "../../interfaces";
 import { IShipmentRepository } from "../../repositories/shipment-repository";
 import { IShipmentAdapter } from "./adapters/shipengine-adapter";
-import { ShipmentRatesError } from "../../errors/shipment-rates-error";
+import { ShipmentRatesError } from "./errors/shipment-rates-error";
+import { ShipmentError } from "./errors/shipment-error";
 
 function mockShippingAddress(): IShippingAddress {
   return {
@@ -27,9 +28,9 @@ function mockRatesPayload(): IFetchRatesPayload {
   }
 }
 
-function mockShipment(): IShipment {
+function mockShipment(id = 'shipment1'): IShipment {
   return {
-    id: 'shipment1',
+    id,
     rates: [
       {
         id: 'rate1',
@@ -62,76 +63,127 @@ describe('ShipmentService', () => {
 
   beforeEach(() => {
     jest.resetModules();
-    repositoryMock = { createShipment: jest.fn().mockResolvedValue(undefined) };
+    repositoryMock = {
+      createShipment: jest.fn().mockResolvedValue(undefined),
+      findShipment: jest.fn().mockResolvedValue(mockShipment())
+    };
     clientMock = { fetchRates: jest.fn().mockResolvedValue(mockShipment()) };
     shipmentService = new ShipmentService(repositoryMock, clientMock);
   })
 
-  it('should fetch rates and save them to the repository', async () => {
-    // Arrange
-    const payload: IFetchRatesPayload = mockRatesPayload();
-    const shipment: IShipment = mockShipment();
+  describe('fetchRates', () => {
+    it('should fetch rates and save them to the repository', async () => {
+      // Arrange
+      const payload: IFetchRatesPayload = mockRatesPayload();
+      const shipment: IShipment = mockShipment();
 
-    // Act
-    const result = await shipmentService.fetchRates(payload);
+      // Act
+      const result = await shipmentService.fetchRates(payload);
 
-    // Assert
-    expect(result).toEqual(shipment);
-    expect(repositoryMock.createShipment).toHaveBeenCalledWith(shipment);
+      // Assert
+      expect(result).toEqual(shipment);
+      expect(repositoryMock.createShipment).toHaveBeenCalledWith(shipment);
+    });
+
+    it('should return the fetched rates', async () => {
+      // Arrange
+      const payload: IFetchRatesPayload = mockRatesPayload();
+      const shipment: IShipment = mockShipment();
+
+      // Act
+      const result = await shipmentService.fetchRates(payload);
+
+      // Assert
+      expect(result).toEqual(shipment);
+    });
+
+    it('should return null if no shipment is fetched', async () => {
+      // Arrange
+      const clientMock: jest.Mocked<IShipmentAdapter> = {
+        fetchRates: jest.fn().mockResolvedValue(null)
+      };
+      const shipmentService = new ShipmentService(repositoryMock, clientMock);
+
+      // Act
+      const result = await shipmentService.fetchRates({} as any);
+
+      // Assert
+      expect(result).toEqual(null);
+    });
+
+    it('should throw a ShipmentRatesError if there was an error getting shipment rates', async () => {
+      // Arrange
+      const payload: IFetchRatesPayload = mockRatesPayload();
+      const error = new Error('Error getting shipment rates');
+      const clientMock: jest.Mocked<IShipmentAdapter> = {
+        fetchRates: jest.fn().mockRejectedValue(error)
+      };
+      const shipmentService = new ShipmentService(repositoryMock, clientMock);
+
+      // Act & Assert
+      await expect(shipmentService.fetchRates(payload)).rejects.toThrow(ShipmentRatesError);
+    });
+
+    it('should call the fetchRates method of the provided client', async () => {
+      // Arrange
+      const payload: IFetchRatesPayload = mockRatesPayload();
+      const clientMock: jest.Mocked<IShipmentAdapter> = {
+        fetchRates: jest.fn().mockResolvedValue(null)
+      };
+      const shipmentService = new ShipmentService(repositoryMock, clientMock);
+
+      // Act
+      await shipmentService.fetchRates(payload);
+
+      // Assert
+      expect(clientMock.fetchRates).toHaveBeenCalledWith(payload);
+    });
   });
 
-  it('should return the fetched rates', async () => {
-    // Arrange
-    const payload: IFetchRatesPayload = mockRatesPayload();
-    const shipment: IShipment = mockShipment();
 
-    // Act
-    const result = await shipmentService.fetchRates(payload);
+  describe('findShipment', () => {
+    it('should return a shipment object when a valid ID is provided and the shipment exists in the repository', async () => {
+      // Arrange
+      const shipment = mockShipment()
+      const shipmentService = new ShipmentService(repositoryMock, clientMock);
 
-    // Assert
-    expect(result).toEqual(shipment);
-  });
+      // Act
+      const result = await shipmentService.findShipment(shipment.id);
 
-  it('should return null if no shipment is fetched', async () => {
-    // Arrange
-    const payload: IFetchRatesPayload = mockRatesPayload();
-    const clientMock: jest.Mocked<IShipmentAdapter> = {
-      fetchRates: jest.fn().mockResolvedValue(null)
-    };
-    const shipmentService = new ShipmentService(repositoryMock, clientMock);
+      // Assert
+      expect(result).toEqual(shipment);
+      expect(repositoryMock.findShipment).toHaveBeenCalledWith(shipment.id);
+    });
 
-    // Act
-    const result = await shipmentService.fetchRates(payload);
+    it('should return null when a valid ID is provided but the shipment does not exist in the repository', async () => {
+      // Arrange
+      const id = 'validId';
+      const repositoryMock = {
+        createShipment: jest.fn().mockResolvedValue(undefined),
+        findShipment: jest.fn().mockResolvedValue(null)
+      };
+      const shipmentService = new ShipmentService(repositoryMock, clientMock);
 
-    // Assert
-    expect(result).toEqual(null);
-  });
+      // Act
+      const result = await shipmentService.findShipment(id);
 
-  it('should throw a ShipmentRatesError if there was an error getting shipment rates', async () => {
-    // Arrange
-    const payload: IFetchRatesPayload = mockRatesPayload();
-    const error = new Error('Error getting shipment rates');
-    const clientMock: jest.Mocked<IShipmentAdapter> = {
-      fetchRates: jest.fn().mockRejectedValue(error)
-    };
-    const shipmentService = new ShipmentService(repositoryMock, clientMock);
+      // Assert
+      expect(result).toBeNull();
+      expect(repositoryMock.findShipment).toHaveBeenCalledWith(id);
+    });
 
-    // Act & Assert
-    await expect(shipmentService.fetchRates(payload)).rejects.toThrow(ShipmentRatesError);
-  });
+    it('should throw a ShipmentError when an error occurs while fetching the shipment from the repository', async () => {
+      // Arrange
+      const id = 'validId';
+      const repositoryMock = {
+        createShipment: jest.fn().mockResolvedValue(undefined),
+        findShipment: jest.fn().mockRejectedValue(new Error('Error fetching shipment'))
+      };
+      const shipmentService = new ShipmentService(repositoryMock, clientMock);
 
-  it('should call the fetchRates method of the provided client', async () => {
-    // Arrange
-    const payload: IFetchRatesPayload = mockRatesPayload();
-    const clientMock: jest.Mocked<IShipmentAdapter> = {
-      fetchRates: jest.fn().mockResolvedValue(null)
-    };
-    const shipmentService = new ShipmentService(repositoryMock, clientMock);
-
-    // Act
-    await shipmentService.fetchRates(payload);
-
-    // Assert
-    expect(clientMock.fetchRates).toHaveBeenCalledWith(payload);
+      // Act & Assert
+      await expect(shipmentService.findShipment(id)).rejects.toThrow(ShipmentError);
+      expect(repositoryMock.findShipment).toHaveBeenCalledWith(id);
+    });
   });
 });

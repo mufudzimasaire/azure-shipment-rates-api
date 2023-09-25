@@ -1,8 +1,9 @@
 import { inject, injectable } from 'inversify'
 import { IShipment } from '../../interfaces';
-import { CosmosClient, Container as CosmosContainer, ItemDefinition } from '@azure/cosmos';
+import { CosmosClient, Container as CosmosContainer, ItemDefinition, ItemResponse } from '@azure/cosmos';
 import { TYPES } from '../../types';
-import { DatabaseConflictError } from '../../errors/database-conflict-error';
+import { ResourceConflictError } from './errors/resource-conflict-error';
+import { NotFoundError } from './errors/not-found-error';
 
 /**
  * @interface IShipmentRepository
@@ -10,6 +11,7 @@ import { DatabaseConflictError } from '../../errors/database-conflict-error';
  **/
 export interface IShipmentRepository {
   createShipment: (shipment: IShipment) => Promise<void>
+  findShipment(id: IShipment['id']): Promise<IShipment | null>
 }
 
 @injectable()
@@ -28,14 +30,31 @@ export class ShipmentRepository implements IShipmentRepository {
   /**
    * Creates a shipment in the Cosmos DB container.
    * @param shipment - The shipment object to be created.
-   * @throws {DatabaseConflictError} - If there is a conflict with an existing shipment.
+   * @throws {ResourceConflictError} - If there is a conflict with an existing shipment.
    */
   async createShipment(shipment: IShipment): Promise<void> {
     try {
       await this._container.items.create(shipment);
     } catch (error) {
-      // propagate error
-      throw new DatabaseConflictError(error.message);
+      throw new ResourceConflictError(error.message);
+    }
+  }
+
+  /**
+   * Retrieves a shipment object from the Cosmos DB container based on its ID.
+   * If the shipment is found, it returns the shipment object.
+   * If the shipment is not found, it throws a NotFoundError with an error message.
+   * 
+   * @param id - The ID of the shipment to find in the Cosmos DB container.
+   * @returns A promise that resolves to the found shipment object (IShipment) if the shipment is found, or null if the shipment is not found.
+   * @throws NotFoundError if the shipment is not found.
+   */
+  async findShipment(id: IShipment['id']): Promise<IShipment | null> {
+    try {
+      const { resource } = await this._container.item(id, id).read();
+      return resource;
+    } catch (error) {
+      throw new NotFoundError(error.message);
     }
   }
 }
