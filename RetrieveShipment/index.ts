@@ -7,7 +7,7 @@ import { handleResponse } from "../src/lib/handle-response";
 
 const retrieveShipmentTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
   try {
-    const shipmentId = req.params?.id
+    const shipmentId: IShipment['id'] = req.params?.id
 
     if (!shipmentId) {
       return handleResponse(context, 400, `Invalid shipment id: ${shipmentId} provided`);

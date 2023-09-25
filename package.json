@@ -1,7 +1,8 @@
 {
-  "name": "shipment_rates_api",
+  "name": "azure-shipment-rates-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Demo Azure Function (v3 Node.js programming model) for Obtaining Shipment Rates and Persisting to Cosmos DB",
+  "author": "Mufudzi Masaire <iammufudzi@protonmail.com> (https://www.linkedin.com/in/mufudzi/)",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
