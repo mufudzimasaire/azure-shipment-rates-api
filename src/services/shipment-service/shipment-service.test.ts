@@ -1,9 +1,9 @@
-import { ShipmentService } from ".";
-import { IFetchRatesPayload, IShipment, IShippingAddress } from "../../interfaces";
-import { IShipmentRepository } from "../../repositories/shipment-repository";
-import { IShipmentAdapter } from "./adapters/shipengine-adapter";
-import { ShipmentRatesError } from "./errors/shipment-rates-error";
-import { ShipmentError } from "./errors/shipment-error";
+import { IFetchRatesPayload, IShipment, IShippingAddress } from '../../interfaces';
+import { IShipmentAdapter } from './adapters/shipengine-adapter';
+import { IShipmentRepository } from '../../repositories/shipment-repository';
+import { ShipmentError } from './errors/shipment-error';
+import { ShipmentRatesError } from './errors/shipment-rates-error';
+import { ShipmentService } from '.';
 
 function mockShippingAddress(): IShippingAddress {
   return {

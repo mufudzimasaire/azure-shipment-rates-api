@@ -1,7 +1,7 @@
-import { ShipmentRepository } from ".";
-import { ResourceConflictError } from "./errors/resource-conflict-error";
-import { IShipment } from "../../interfaces";
-import { NotFoundError } from "./errors/not-found-error";
+import { ShipmentRepository } from '.';
+import { IShipment } from '../../interfaces';
+import { NotFoundError } from './errors/not-found-error';
+import { ResourceConflictError } from './errors/resource-conflict-error';
 
 function mockShipment(id = 'shipment1'): IShipment {
   return {

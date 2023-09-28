@@ -1,11 +1,13 @@
-import 'reflect-metadata'
-import { BindingScopeEnum, Container } from 'inversify'
-import { CosmosClient } from '@azure/cosmos'
-import { IShipmentRepository, ShipmentRepository } from './repositories/shipment-repository'
-import { IShipmentService, ShipmentService } from './services/shipment-service'
-import { TYPES } from './types'
-import ShipEngine from 'shipengine'
-import { IShipmentAdapter, ShipEngineAdapter } from './services/shipment-service/adapters/shipengine-adapter'
+import 'reflect-metadata';
+import { BindingScopeEnum, Container } from 'inversify';
+import ShipEngine from 'shipengine';
+
+
+import { CosmosClient } from '@azure/cosmos';
+import { IShipmentAdapter, ShipEngineAdapter } from './services/shipment-service/adapters/shipengine-adapter';
+import { IShipmentRepository, ShipmentRepository } from './repositories/shipment-repository';
+import { IShipmentService, ShipmentService } from './services/shipment-service';
+import { TYPES } from './types';
 
 const appContainer = new Container({
   /**

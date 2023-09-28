@@ -1,4 +1,4 @@
-import { Context } from "vm";
+import { Context } from 'vm';
 
 /**
  * Sets the response properties of a given context object.

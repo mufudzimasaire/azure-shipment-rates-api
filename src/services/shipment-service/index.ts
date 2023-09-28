@@ -1,10 +1,11 @@
-import { inject, injectable } from 'inversify'
-import { IShipmentRepository } from '../../repositories/shipment-repository'
-import { IFetchRatesPayload, IShipment } from '../../interfaces'
-import { TYPES } from '../../types'
-import { IShipmentAdapter } from './adapters/shipengine-adapter'
-import { ShipmentRatesError } from './errors/shipment-rates-error'
+import { inject, injectable } from 'inversify';
+
+import { IFetchRatesPayload, IShipment } from '../../interfaces';
+import { IShipmentAdapter } from './adapters/shipengine-adapter';
+import { IShipmentRepository } from '../../repositories/shipment-repository';
 import { ShipmentError } from './errors/shipment-error';
+import { ShipmentRatesError } from './errors/shipment-rates-error';
+import { TYPES } from '../../types';
 
 /**
  * @interface IShipmentService

@@ -1,9 +1,10 @@
-import { inject, injectable } from 'inversify'
+import { CosmosClient, Container as CosmosContainer } from '@azure/cosmos';
+import { inject, injectable } from 'inversify';
+
 import { IShipment } from '../../interfaces';
-import { CosmosClient, Container as CosmosContainer, ItemDefinition, ItemResponse } from '@azure/cosmos';
 import { TYPES } from '../../types';
-import { ResourceConflictError } from './errors/resource-conflict-error';
 import { NotFoundError } from './errors/not-found-error';
+import { ResourceConflictError } from './errors/resource-conflict-error';
 
 /**
  * @interface IShipmentRepository

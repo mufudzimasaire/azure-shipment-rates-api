@@ -1,9 +1,10 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { IShipment } from "../src/interfaces";
-import appContainer from "../src/inversify.config";
-import { IShipmentService } from '../src/services/shipment-service'
-import { TYPES } from '../src/types'
-import { handleResponse } from "../src/lib/handle-response";
+import { AzureFunction, Context, HttpRequest } from '@azure/functions';
+
+import { handleResponse } from '../src/lib/handle-response';
+import { IShipment } from '../src/interfaces';
+import { IShipmentService } from '../src/services/shipment-service';
+import { TYPES } from '../src/types';
+import appContainer from '../src/inversify.config';
 
 const retrieveShipmentTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
   try {

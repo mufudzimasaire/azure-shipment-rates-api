@@ -1,9 +1,10 @@
-import { inject, injectable } from 'inversify'
-import { IFetchRatesPayload, IShipment } from '../../../interfaces'
-import { TYPES } from '../../../types'
-import ShipEngine from 'shipengine'
-import { warehouseAddress } from '../warehouse-address'
-import { ShipmentRatesError } from '../errors/shipment-rates-error'
+import { inject, injectable } from 'inversify';
+import ShipEngine from 'shipengine';
+
+import { IFetchRatesPayload, IShipment } from '../../../interfaces';
+import { TYPES } from '../../../types';
+import { ShipmentRatesError } from '../errors/shipment-rates-error';
+import { warehouseAddress } from '../warehouse-address';
 
 /**
  * @interface IShipmentAdapter

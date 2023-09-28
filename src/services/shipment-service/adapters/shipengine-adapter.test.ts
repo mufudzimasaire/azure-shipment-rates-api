@@ -1,6 +1,6 @@
-import { ShipEngineAdapter } from "./shipengine-adapter";
-import { warehouseAddress } from '../warehouse-address'
-import { IFetchRatesPayload } from "../../../interfaces";
+import { IFetchRatesPayload } from '../../../interfaces';
+import { warehouseAddress } from '../warehouse-address';
+import { ShipEngineAdapter } from './shipengine-adapter';
 
 function shipEngineMockClient(rateResponse = {}) {
   return {
