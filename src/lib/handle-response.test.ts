@@ -1,4 +1,4 @@
-import { handleResponse } from './handle-response'
+import { handleResponse } from './handle-response';
 
 describe('handleResponse', () => {
   it('should set the status code and body content in the response object', () => {
